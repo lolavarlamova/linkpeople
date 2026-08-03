@@ -294,6 +294,14 @@ body.nav-open .mobile-nav { opacity: 1; transform: none; pointer-events: auto; v
 .role-list li { font-size: 0.98rem; color: var(--text-muted-dark); padding: 8px 0; border-bottom: 1px solid var(--border-dark); }
 .theme-light .role-list li { color: var(--text-muted-light); border-color: var(--border-light); }
 
+/* Server-rendered role directory (progressively enhanced into tabs) */
+.role-group-title { font-size: 1.15rem; letter-spacing: -0.01em; margin-bottom: 16px; font-weight: 600; }
+.role-group { padding: 6px 0 10px; }
+.role-group[hidden] { display: none; }
+.roles.is-enhanced .role-group { border: 1px solid var(--border-dark); border-radius: var(--radius-lg); padding: clamp(24px,3vw,40px); }
+.roles.is-enhanced .role-group:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
 /* ============================================================
    Process timeline
    ============================================================ */
@@ -345,6 +353,9 @@ body.nav-open .mobile-nav { opacity: 1; transform: none; pointer-events: auto; v
 .form-status.info { border-color: rgba(184,255,74,.4); background: rgba(184,255,74,.06); }
 .form-status.error { border-color: rgba(255,107,107,.5); background: rgba(255,107,107,.07); }
 .form-note { font-size: 0.85rem; color: var(--text-muted-dark); margin-top: 14px; }
+.hp-wrap { position: absolute !important; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+.file-name { font-size: 0.85rem; color: var(--accent); margin-top: 6px; min-height: 1em; word-break: break-all; }
+button[disabled], .btn[disabled] { opacity: 0.6; cursor: progress; }
 
 /* ============================================================
    Insights / article cards

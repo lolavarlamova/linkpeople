@@ -1,0 +1,10 @@
+{
+  "name": "linkpeople",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LinkPeople static site + Vercel serverless email functions (Resend).",
+  "type": "module",
+  "dependencies": {
+    "resend": "^4.0.0"
+  }
+}

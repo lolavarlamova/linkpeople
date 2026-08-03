@@ -1,0 +1,7 @@
+# Keep in git, but do not deploy (route returns Vercel 404) while Insights is closed.
+insights.html
+
+# Never deploy secrets or local deps.
+.env
+.env.local
+node_modules/

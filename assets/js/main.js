@@ -3,11 +3,6 @@
   "use strict";
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------- Footer year ---------- */
-  document.querySelectorAll("[data-year]").forEach(function (el) {
-    el.textContent = new Date().getFullYear();
-  });
-
   /* ---------- Sticky header background on scroll ---------- */
   var header = document.getElementById("siteHeader");
   if (header) {
@@ -119,6 +114,58 @@
   }
   buildRoleSelector();
 
+  /* ---------- Expertise role directory: enhance server-rendered groups into tabs ---------- */
+  function enhanceRoleDirectory() {
+    var root = document.getElementById("roleDirectory");
+    if (!root) return;
+    var groups = Array.prototype.slice.call(root.querySelectorAll(".role-group"));
+    if (groups.length < 2) return;
+    root.classList.add("is-enhanced");
+    var tablist = document.createElement("div");
+    tablist.className = "role-tabs"; tablist.setAttribute("role", "tablist");
+    tablist.setAttribute("aria-label", "Role categories");
+    groups.forEach(function (g, i) {
+      var titleEl = g.querySelector(".role-group-title");
+      var label = titleEl ? titleEl.textContent.trim() : "Group " + (i + 1);
+      var id = "rg-" + i;
+      g.id = "panel-" + id;
+      g.setAttribute("role", "tabpanel");
+      g.setAttribute("aria-labelledby", "tab-" + id);
+      g.setAttribute("tabindex", "0");
+      if (i !== 0) g.hidden = true;
+      if (titleEl) titleEl.classList.add("visually-hidden"); // avoid duplicate visible label
+      var tab = document.createElement("button");
+      tab.type = "button"; tab.className = "role-tab"; tab.id = "tab-" + id; tab.textContent = label;
+      tab.setAttribute("role", "tab"); tab.setAttribute("aria-controls", "panel-" + id);
+      tab.setAttribute("aria-selected", i === 0 ? "true" : "false");
+      tab.tabIndex = i === 0 ? 0 : -1;
+      tablist.appendChild(tab);
+    });
+    root.insertBefore(tablist, root.firstChild);
+    var tabs = Array.prototype.slice.call(tablist.querySelectorAll('[role="tab"]'));
+    function select(idx) {
+      tabs.forEach(function (t, i) {
+        var on = i === idx;
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+      });
+    }
+    tablist.addEventListener("click", function (e) {
+      var t = e.target.closest('[role="tab"]'); if (!t) return;
+      select(tabs.indexOf(t)); t.focus();
+    });
+    tablist.addEventListener("keydown", function (e) {
+      var i = tabs.indexOf(document.activeElement); if (i < 0) return;
+      var n = null;
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") n = (i + 1) % tabs.length;
+      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") n = (i - 1 + tabs.length) % tabs.length;
+      else if (e.key === "Home") n = 0; else if (e.key === "End") n = tabs.length - 1;
+      if (n !== null) { e.preventDefault(); tabs[n].focus(); select(n); }
+    });
+  }
+  enhanceRoleDirectory();
+
   /* ---------- Insights cards (data-driven) ---------- */
   (function () {
     var mount = document.getElementById("insightsGrid");
@@ -217,12 +264,11 @@
     var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { size(); build(); if (reduceMotion) draw(); }, 200); });
   })();
 
-  /* ---------- Forms: validation + honest submission adapter ---------- */
-  /* TODO: connect a backend (Formspree / Resend / your API) by setting FORM_ENDPOINT.
-     While empty, forms validate fully and fall back to a prefilled mailto - they never
-     show a fake "sent" state. File uploads require a real backend (see note below). */
-  var FORM_ENDPOINT = ""; // e.g. "https://formspree.io/f/xxxxxxx"
+  /* ---------- Forms: client validation + server submission (Resend via /api) ---------- */
   var CONTACT_EMAIL = "hello@linkpeople.agency";
+  var MIN_FILL_MS = 3000;               // reject submissions faster than this (basic bot check)
+  var MAX_CV_BYTES = 4 * 1024 * 1024;   // 4 MB (Vercel serverless body limit ~4.5 MB)
+  var ALLOWED_CV_EXT = ["pdf", "doc", "docx"];
 
   function setError(field, msg) {
     var input = field.querySelector("input, select, textarea");
@@ -232,7 +278,7 @@
   }
   function validateField(field) {
     var input = field.querySelector("input, select, textarea");
-    if (!input) return true;
+    if (!input || input.type === "file") return true;
     var val = (input.value || "").trim();
     if (input.hasAttribute("required")) {
       if (input.type === "checkbox" && !input.checked) { setError(field, "Please confirm to continue."); return false; }
@@ -240,12 +286,23 @@
     }
     if (input.type === "email" && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) { setError(field, "Enter a valid email address."); return false; }
     if (input.type === "url" && val && !/^https?:\/\/.+\..+/.test(val)) { setError(field, "Enter a valid URL (including https://)."); return false; }
+    if (input.maxLength && input.maxLength > 0 && val.length > input.maxLength) { setError(field, "Please shorten this to " + input.maxLength + " characters or fewer."); return false; }
     setError(field, ""); return true;
   }
 
   document.querySelectorAll("form[data-lp-form]").forEach(function (form) {
+    var endpoint = form.getAttribute("data-endpoint");
+    var successMsg = form.getAttribute("data-success") || "Thank you. Your submission has been received.";
+    var errorMsg = form.getAttribute("data-error") || ("We could not submit the form. Please try again or email " + CONTACT_EMAIL + " directly.");
     var fields = Array.prototype.slice.call(form.querySelectorAll(".field, .consent"));
     var status = form.querySelector(".form-status");
+    var submitBtn = form.querySelector('button[type="submit"]');
+    var honeypot = form.querySelector(".hp-field");
+    var fileInput = form.querySelector('input[type="file"]');
+    var fileNameEl = form.querySelector("[data-filename]");
+    var fileField = fileInput ? fileInput.closest(".field") : null;
+    var startedAt = Date.now();
+    var submitting = false;
 
     fields.forEach(function (field) {
       var input = field.querySelector("input, select, textarea");
@@ -254,54 +311,73 @@
       input.addEventListener("input", function () { if (input.getAttribute("aria-invalid") === "true") validateField(field); });
     });
 
+    function validateFile() {
+      if (!fileInput || !fileInput.files || !fileInput.files.length) return true; // CV optional
+      var f = fileInput.files[0];
+      var ext = (f.name.split(".").pop() || "").toLowerCase();
+      if (ALLOWED_CV_EXT.indexOf(ext) < 0) { if (fileField) setError(fileField, "Upload a PDF, DOC or DOCX file."); return false; }
+      if (f.size > MAX_CV_BYTES) { if (fileField) setError(fileField, "File must be 4 MB or smaller."); return false; }
+      if (fileField) setError(fileField, ""); return true;
+    }
+    if (fileInput) {
+      fileInput.addEventListener("change", function () {
+        if (fileNameEl) fileNameEl.textContent = (fileInput.files && fileInput.files.length) ? fileInput.files[0].name : "";
+        validateFile();
+      });
+    }
+
+    function announce(cls, msg) { if (!status) return; status.className = "form-status show " + cls; status.textContent = msg; }
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+      if (submitting) return;
+
       var ok = true, firstBad = null;
-      fields.forEach(function (field) { if (!validateField(field) && ok) { ok = false; firstBad = field; } else if (!validateField(field)) { ok = false; } });
-      if (!ok) {
-        if (status) { status.className = "form-status show error"; status.textContent = "Please correct the highlighted fields."; }
-        if (firstBad) { var fi = firstBad.querySelector("input, select, textarea"); if (fi) fi.focus(); }
-        return;
-      }
+      fields.forEach(function (field) { if (!validateField(field)) { ok = false; if (!firstBad) firstBad = field; } });
+      if (!validateFile() && ok) { ok = false; firstBad = firstBad || fileField; }
+      else if (!validateFile()) { ok = false; }
+      if (!ok) { announce("error", "Please correct the highlighted fields."); if (firstBad) { var fi = firstBad.querySelector("input, select, textarea"); if (fi) fi.focus(); } return; }
 
-      if (FORM_ENDPOINT) {
-        // Real submission path (enabled once FORM_ENDPOINT is set).
+      // Spam checks (also enforced server-side)
+      if (honeypot && honeypot.value.trim() !== "") { announce("error", errorMsg); return; }
+      if (Date.now() - startedAt < MIN_FILL_MS) { announce("error", "Please take a moment to review your details, then submit again."); return; }
+
+      submitting = true;
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.dataset.label = submitBtn.innerHTML; submitBtn.textContent = "Sending\u2026"; }
+      announce("info", "Sending\u2026");
+
+      var request;
+      if (fileInput) {
         var fd = new FormData(form);
-        fetch(FORM_ENDPOINT, { method: "POST", body: fd, headers: { Accept: "application/json" } })
-          .then(function (r) {
-            if (r.ok) { form.reset(); status.className = "form-status show info"; status.textContent = "Thank you - your message has been sent. We'll be in touch shortly."; }
-            else throw new Error("bad status");
-          })
-          .catch(function () { status.className = "form-status show error"; status.textContent = "Something went wrong sending the form. Please email " + CONTACT_EMAIL + "."; });
-        return;
+        fd.append("t0", String(startedAt));
+        fd.append("sourcePage", window.location.pathname);
+        request = fetch(endpoint, { method: "POST", body: fd });
+      } else {
+        var data = { t0: startedAt, sourcePage: window.location.pathname };
+        fields.forEach(function (field) {
+          var input = field.querySelector("input, select, textarea");
+          if (!input || !input.name) return;
+          data[input.name] = input.type === "checkbox" ? input.checked : input.value.trim();
+        });
+        if (honeypot && honeypot.name) data[honeypot.name] = honeypot.value;
+        request = fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
       }
 
-      // No backend configured yet - do NOT fake success. Offer a working mailto fallback.
-      var subject = encodeURIComponent(form.getAttribute("data-subject") || "Enquiry via linkpeople.agency");
-      var lines = [];
-      fields.forEach(function (field) {
-        var input = field.querySelector("input, select, textarea");
-        if (!input || input.type === "checkbox" || input.type === "file") return;
-        var label = field.querySelector("label");
-        var name = label ? label.textContent.replace("*", "").trim() : input.name;
-        if ((input.value || "").trim()) lines.push(name + ": " + input.value.trim());
-      });
-      var hasFile = form.querySelector('input[type="file"]');
-      if (hasFile && hasFile.files && hasFile.files.length) {
-        lines.push("(CV attached in form - please attach the file manually to this email.)");
-      }
-      var body = encodeURIComponent(lines.join("\n"));
-      if (status) {
-        status.className = "form-status show info";
-        var mailtoHref = "mailto:" + CONTACT_EMAIL + "?subject=" + subject + "&body=" + body;
-        var link = document.createElement("a");
-        link.className = "link-underline";
-        link.style.color = "var(--accent)";
-        link.href = mailtoHref;
-        link.textContent = "Send this enquiry by email instead \u2192";
-        status.textContent = "This site isn't connected to a form service yet, so nothing was submitted automatically. ";
-        status.appendChild(link);
-      }
+      request
+        .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json().catch(function () { return { ok: true }; }); })
+        .then(function (res) {
+          if (res && res.ok === false) throw new Error("server rejected");
+          form.reset();
+          if (fileNameEl) fileNameEl.textContent = "";
+          fields.forEach(function (field) { setError(field, ""); });
+          if (fileField) setError(fileField, "");
+          announce("info", successMsg);
+        })
+        .catch(function () { announce("error", errorMsg); })
+        .then(function () {
+          submitting = false;
+          if (submitBtn) { submitBtn.disabled = false; if (submitBtn.dataset.label) submitBtn.innerHTML = submitBtn.dataset.label; }
+        });
     });
   });
 })();
