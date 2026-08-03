@@ -1,5 +1,5 @@
-// Vercel Serverless Function (Node, Web-standard handler) — employer enquiry -> Resend email.
-// Deployed automatically by Vercel; requires RESEND_API_KEY + a verified Resend sending domain.
+// Vercel Serverless Function (Node.js classic (req,res) signature) — employer enquiry -> Resend.
+// Requires RESEND_API_KEY + a verified Resend sending domain (see FORM_SETUP.md).
 import { Resend } from "resend";
 
 const FROM = process.env.FORM_FROM_EMAIL || "LinkPeople Website <website@linkpeople.agency>";
@@ -12,9 +12,6 @@ function esc(s) {
 }
 function clip(s, n) { return String(s == null ? "" : s).trim().slice(0, n); }
 function isEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
-function json(body, status) {
-  return new Response(JSON.stringify(body), { status: status || 200, headers: { "content-type": "application/json" } });
-}
 function table(title, rows) {
   var trs = rows.map(function (r) {
     return '<tr><td style="padding:6px 12px;color:#62676d;vertical-align:top;white-space:nowrap">' + esc(r[0]) +
@@ -32,26 +29,27 @@ function confirmEmployer(first) {
     "<p>Best,<br>LinkPeople<br>Recruitment &amp; HR Advisory<br>hello@linkpeople.agency</p></div>";
 }
 
-export default async function handler(request) {
-  if (request.method !== "POST") return json({ ok: false, error: "method_not_allowed" }, 405);
-  if (!process.env.RESEND_API_KEY) { console.error("employer-enquiry: RESEND_API_KEY missing"); return json({ ok: false, error: "server_config" }, 500); }
+export default async function handler(req, res) {
+  if (req.method !== "POST") { res.status(405).json({ ok: false, error: "method_not_allowed" }); return; }
+  if (!process.env.RESEND_API_KEY) { console.error("employer-enquiry: RESEND_API_KEY missing"); res.status(500).json({ ok: false, error: "server_config" }); return; }
 
-  let data;
-  try { data = await request.json(); } catch (e) { return json({ ok: false, error: "bad_request" }, 400); }
+  var data = req.body;
+  if (typeof data === "string") { try { data = JSON.parse(data || "{}"); } catch (e) { res.status(400).json({ ok: false, error: "bad_request" }); return; } }
+  if (!data || typeof data !== "object") { res.status(400).json({ ok: false, error: "bad_request" }); return; }
 
   // Spam: honeypot (silently accept, send nothing) + minimum completion time
-  if (String(data.company_url || "").trim() !== "") return json({ ok: true });
+  if (String(data.company_url || "").trim() !== "") { res.status(200).json({ ok: true }); return; }
   var elapsed = Date.now() - Number(data.t0 || 0);
-  if (!data.t0 || elapsed < 2500 || elapsed > 1000 * 60 * 60) return json({ ok: false, error: "timing" }, 400);
+  if (!data.t0 || elapsed < 2500 || elapsed > 1000 * 60 * 60) { res.status(400).json({ ok: false, error: "timing" }); return; }
 
   var name = clip(data.name, 120), company = clip(data.company, 160), email = clip(data.email, 200),
     website = clip(data.website, 300), help = clip(data.help, 80), roles = clip(data.roles, 40),
     timeline = clip(data.timeline, 80), message = clip(data.message, 4000);
 
-  if (!name || !company || !email || !help || !message || !isEmail(email)) return json({ ok: false, error: "validation" }, 400);
-  if (website && !/^https?:\/\/.+\..+/.test(website)) return json({ ok: false, error: "validation" }, 400);
+  if (!name || !company || !email || !help || !message || !isEmail(email)) { res.status(400).json({ ok: false, error: "validation" }); return; }
+  if (website && !/^https?:\/\/.+\..+/.test(website)) { res.status(400).json({ ok: false, error: "validation" }); return; }
 
-  var ua = request.headers.get("user-agent") || "unknown";
+  var ua = (req.headers && req.headers["user-agent"]) || "unknown";
   var source = clip(data.sourcePage, 120) || "/contact";
   var subject = "New employer enquiry — " + company + " — " + help;
   var html = table("New employer enquiry", [
@@ -67,7 +65,7 @@ export default async function handler(request) {
     await resend.emails.send({ from: FROM, to: email, subject: "We received your LinkPeople enquiry", html: confirmEmployer(first) });
   } catch (e) {
     console.error("employer-enquiry: send failed:", e && e.message);
-    return json({ ok: false, error: "send_failed" }, 502);
+    res.status(502).json({ ok: false, error: "send_failed" }); return;
   }
-  return json({ ok: true });
+  res.status(200).json({ ok: true });
 }

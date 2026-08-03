@@ -5,6 +5,7 @@
   "description": "LinkPeople static site + Vercel serverless email functions (Resend).",
   "type": "module",
   "dependencies": {
+    "busboy": "^1.6.0",
     "resend": "^4.0.0"
   }
 }
