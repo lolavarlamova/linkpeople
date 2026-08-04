@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://linkpeople.agency/</loc><priority>1.0</priority></url>
-  <url><loc>https://linkpeople.agency/services</loc><priority>0.9</priority></url>
-  <url><loc>https://linkpeople.agency/industries</loc><priority>0.9</priority></url>
-  <url><loc>https://linkpeople.agency/expertise</loc><priority>0.8</priority></url>
-  <url><loc>https://linkpeople.agency/about</loc><priority>0.7</priority></url>
-  <url><loc>https://linkpeople.agency/contact</loc><priority>0.8</priority></url>
-  <url><loc>https://linkpeople.agency/talent-network</loc><priority>0.7</priority></url>
-  <url><loc>https://linkpeople.agency/privacy</loc><priority>0.3</priority></url>
-  <url><loc>https://linkpeople.agency/terms</loc><priority>0.3</priority></url>
+  <url><loc>https://www.linkpeople.agency/</loc><priority>1.0</priority></url>
+  <url><loc>https://www.linkpeople.agency/services</loc><priority>0.9</priority></url>
+  <url><loc>https://www.linkpeople.agency/industries</loc><priority>0.9</priority></url>
+  <url><loc>https://www.linkpeople.agency/expertise</loc><priority>0.8</priority></url>
+  <url><loc>https://www.linkpeople.agency/opportunities</loc><priority>0.8</priority></url>
+  <url><loc>https://www.linkpeople.agency/about</loc><priority>0.7</priority></url>
+  <url><loc>https://www.linkpeople.agency/contact</loc><priority>0.8</priority></url>
+  <url><loc>https://www.linkpeople.agency/talent-network</loc><priority>0.7</priority></url>
+  <url><loc>https://www.linkpeople.agency/privacy</loc><priority>0.3</priority></url>
+  <url><loc>https://www.linkpeople.agency/candidate-privacy</loc><priority>0.3</priority></url>
+  <url><loc>https://www.linkpeople.agency/terms</loc><priority>0.3</priority></url>
+  <!-- Live opportunity pages (/opportunities/<slug>) are added here individually when published.
+       Do not list draft or closed opportunities. -->
 </urlset>

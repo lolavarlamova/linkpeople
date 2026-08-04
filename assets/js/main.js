@@ -3,6 +3,12 @@
   "use strict";
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  function escHtml(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
   /* ---------- Sticky header background on scroll ---------- */
   var header = document.getElementById("siteHeader");
   if (header) {
@@ -47,6 +53,13 @@
       }
     });
   }
+
+  /* ---------- Legal "last updated" from central config (static fallback in HTML) ---------- */
+  (function () {
+    if (!window.LP || !window.LP.legal || !window.LP.legal.lastUpdated) return;
+    var els = document.querySelectorAll("[data-legal-updated]");
+    Array.prototype.forEach.call(els, function (el) { el.textContent = window.LP.legal.lastUpdated; });
+  })();
 
   /* ---------- Reveal on scroll ---------- */
   var revealEls = document.querySelectorAll(".reveal");
@@ -180,6 +193,115 @@
         '<div class="a-foot"><span class="link-arrow">Article coming soon <span class="arrow" aria-hidden="true">\u2192</span></span></div>';
       mount.appendChild(art);
     });
+  })();
+
+  /* ---------- Opportunities: live roles list (data-driven) ---------- */
+  (function () {
+    var mount = document.getElementById("liveOpportunities");
+    if (!mount || !window.LP || typeof window.LP.liveOpportunities !== "function") return;
+    var live = window.LP.liveOpportunities();
+    if (!live.length) return; // keep the server-rendered empty state
+    mount.innerHTML = "";
+    mount.classList.add("has-items");
+    live.forEach(function (o) {
+      var a = document.createElement("a");
+      a.className = "card opp-card reveal in";
+      a.href = "/opportunities/" + o.slug;
+      var chips = [];
+      if (o.location) chips.push(o.location);
+      if (o.workFormat) chips.push(o.workFormat);
+      if (o.seniority) chips.push(o.seniority);
+      var meta = chips.map(function (c) { return "<li>" + escHtml(c) + "</li>"; }).join("");
+      a.innerHTML =
+        '<div class="opp-head"><span class="opp-status opp-status--open">Open</span></div>' +
+        '<h3 class="h-card">' + escHtml(o.title) + '</h3>' +
+        '<p class="muted mt-s">' + escHtml(o.summary || "") + '</p>' +
+        (meta ? '<ul class="opp-meta">' + meta + '</ul>' : '') +
+        '<span class="card-foot link-arrow">View role <span class="arrow" aria-hidden="true">\u2192</span></span>';
+      mount.appendChild(a);
+    });
+  })();
+
+  /* ---------- Opportunity detail page (data-driven + JobPosting JSON-LD) ---------- */
+  (function () {
+    var root = document.getElementById("opportunityDetail");
+    if (!root || !window.LP || typeof window.LP.getOpportunity !== "function") return;
+    var slug = root.getAttribute("data-slug") || "";
+    var o = window.LP.getOpportunity(slug);
+
+    // Missing or draft -> not public: redirect to the listing.
+    if (!o || o.status === "draft") { window.location.replace("/opportunities"); return; }
+
+    function backLink() {
+      return '<p class="mt-l"><a class="link-arrow" href="/opportunities"><span aria-hidden="true">\u2190</span> All opportunities</a></p>';
+    }
+    function listBlock(title, items) {
+      if (!items || !items.length) return "";
+      var lis = items.map(function (i) { return "<li>" + escHtml(i) + "</li>"; }).join("");
+      return '<div class="opp-section"><h2>' + escHtml(title) + '</h2><ul>' + lis + "</ul></div>";
+    }
+
+    // Closed -> "Applications closed" state + noindex.
+    if (o.status === "closed") {
+      var mrobots = document.createElement("meta");
+      mrobots.name = "robots"; mrobots.content = "noindex, follow";
+      document.head.appendChild(mrobots);
+      document.title = o.title + " (closed) | LinkPeople";
+      root.innerHTML =
+        '<span class="eyebrow">Opportunity</span>' +
+        '<h1 class="h-hero" style="margin-top:18px">' + escHtml(o.title) + "</h1>" +
+        '<p class="lead mt-m">Applications for this role are now closed. You are welcome to join our ' +
+        '<a class="link-underline" style="color:var(--accent)" href="/talent-network">Talent Network</a> ' +
+        "to be considered for relevant future opportunities.</p>" + backLink();
+      return;
+    }
+
+    // Live role.
+    document.title = o.seoTitle || (o.title + " | LinkPeople");
+    var chips = [];
+    if (o.location) chips.push(o.location);
+    if (o.workFormat) chips.push(o.workFormat);
+    if (o.employmentType) chips.push(o.employmentType.replace(/_/g, " ").toLowerCase());
+    if (o.seniority) chips.push(o.seniority);
+    var meta = chips.map(function (c) { return "<li>" + escHtml(c) + "</li>"; }).join("");
+    var applyHref = "/talent-network", applyLabel = "Apply via the Talent Network";
+    if (o.applyMethod && o.applyMethod !== "form") { applyHref = o.applyMethod; applyLabel = "Apply now"; }
+
+    root.className = "opp-detail";
+    root.innerHTML =
+      '<span class="eyebrow">Opportunity</span>' +
+      '<h1 class="h-hero" style="margin-top:18px">' + escHtml(o.title) + "</h1>" +
+      (meta ? '<ul class="opp-meta">' + meta + "</ul>" : "") +
+      (o.description ? '<div class="opp-section"><h2>Overview</h2><p class="muted">' + escHtml(o.description).replace(/\n/g, "<br>") + "</p></div>" : "") +
+      listBlock("Responsibilities", o.responsibilities) +
+      listBlock("Requirements", o.requirements) +
+      listBlock("Preferred", o.preferred) +
+      listBlock("Languages", o.languages) +
+      (o.compensation ? '<div class="opp-section"><h2>Compensation</h2><p class="muted">' + escHtml(o.compensation) + "</p></div>" : "") +
+      '<div class="opp-section"><a class="btn btn-primary btn-lg" href="' + escHtml(applyHref) + '">' + applyLabel + ' <span class="arrow" aria-hidden="true">\u2192</span></a></div>' +
+      '<p class="form-note">This is a real search. By applying you agree your details may be handled in line with our <a class="link-underline" style="color:var(--accent)" href="/candidate-privacy">Candidate Privacy Notice</a>.</p>' +
+      backLink();
+
+    // JobPosting structured data - only for genuine live roles, from the same data source.
+    try {
+      var jp = {
+        "@context": "https://schema.org/",
+        "@type": "JobPosting",
+        "title": o.title,
+        "description": o.description || o.summary || o.title,
+        "datePosted": o.published || undefined,
+        "hiringOrganization": { "@type": "Organization", "name": "LinkPeople", "sameAs": "https://www.linkpeople.agency" },
+        "employmentType": o.employmentType || undefined
+      };
+      if (o.closing) jp.validThrough = o.closing;
+      if (o.workFormat === "Remote") { jp.jobLocationType = "TELECOMMUTE"; }
+      if (o.location) { jp.applicantLocationRequirements = { "@type": "Country", "name": o.location }; }
+      Object.keys(jp).forEach(function (k) { if (jp[k] === undefined) delete jp[k]; });
+      var sc = document.createElement("script");
+      sc.type = "application/ld+json";
+      sc.textContent = JSON.stringify(jp);
+      document.head.appendChild(sc);
+    } catch (e) {}
   })();
 
   /* ---------- Abstract "connections" visual (lightweight canvas) ---------- */

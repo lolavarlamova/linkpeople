@@ -29,10 +29,15 @@ sent or faked — the form offers a prefilled `mailto:` fallback. File uploads r
 backend (the mailto fallback cannot attach files).
 
 ## To review before launch
-- `privacy.html` and `terms.html` contain **placeholder** content only — final legal text must be
-  drafted and reviewed by a qualified professional.
-- Replace the LinkedIn `href="#"` placeholders and the `og.png` social image.
-- Confirm the canonical/base domain (`https://linkpeople.agency`).
+- `privacy.html`, `candidate-privacy.html` and `terms.html` are concise interim notices describing
+  current behaviour. They have **not** been reviewed by a lawyer — a final review by a qualified
+  professional is recommended.
+- **Launch dependency:** exact registered operator details in `assets/js/legal.js`
+  (`legalOperatorName`, `registrationDetails`) are `null`. Until provided, pages describe the
+  business as "a Ukrainian individual entrepreneur operating under the LinkPeople brand".
+- Ensure the `privacy@linkpeople.agency` mailbox/alias exists in Google Workspace (used for data requests).
+- Canonical/base domain is `https://www.linkpeople.agency` (apex redirects to www).
+- Add real roles via `OPPORTUNITIES.md`. Never publish demo vacancies.
 
 ## Deployment
 Static — deploy the folder to Vercel (or any static host). `vercel.json` enables clean URLs.

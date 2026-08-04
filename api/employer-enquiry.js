@@ -25,13 +25,29 @@ function confirmEmployer(first) {
   return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#111315;line-height:1.6;max-width:560px">' +
     "<p>Hi " + esc(first) + ",</p>" +
     "<p>Thank you for contacting LinkPeople.</p>" +
-    "<p>We have received your enquiry and will review the information you provided. We will contact you shortly to discuss the hiring need and the most appropriate way to support it.</p>" +
+    "<p>We have received your enquiry and will review the information you provided, then get in touch about the hiring need and the most appropriate way to support it.</p>" +
+    '<p>You can learn more at <a href="https://www.linkpeople.agency">www.linkpeople.agency</a>.</p>' +
     "<p>Best,<br>LinkPeople<br>Recruitment &amp; HR Advisory<br>hello@linkpeople.agency</p></div>";
+}
+
+// Best-effort in-memory rate limit (per warm instance; not a substitute for a shared store).
+function clientIp(req) {
+  var xf = (req.headers && (req.headers["x-forwarded-for"] || req.headers["x-real-ip"])) || "";
+  return String(xf).split(",")[0].trim() || "unknown";
+}
+function rateLimited(ip) {
+  var store = globalThis.__lpEmpHits || (globalThis.__lpEmpHits = new Map());
+  var now = Date.now(), WINDOW = 10000, MAX = 5;
+  var arr = (store.get(ip) || []).filter(function (t) { return now - t < WINDOW; });
+  arr.push(now); store.set(ip, arr);
+  if (store.size > 5000) store.clear();
+  return arr.length > MAX;
 }
 
 export default async function handler(req, res) {
   if (req.method !== "POST") { res.status(405).json({ ok: false, error: "method_not_allowed" }); return; }
   if (!process.env.RESEND_API_KEY) { console.error("employer-enquiry: RESEND_API_KEY missing"); res.status(500).json({ ok: false, error: "server_config" }); return; }
+  if (rateLimited(clientIp(req))) { res.status(429).json({ ok: false, error: "rate_limited" }); return; }
 
   var data = req.body;
   if (typeof data === "string") { try { data = JSON.parse(data || "{}"); } catch (e) { res.status(400).json({ ok: false, error: "bad_request" }); return; } }

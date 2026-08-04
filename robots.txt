@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
-Sitemap: https://linkpeople.agency/sitemap.xml
+Sitemap: https://www.linkpeople.agency/sitemap.xml

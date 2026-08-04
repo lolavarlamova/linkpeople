@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b0d0f"/>
+      <stop offset="1" stop-color="#101418"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bg)"/>
+
+  <!-- ===== OG content lives in the centred 630-tall band: y = 285 .. 915 ===== -->
+
+  <!-- minimal connection motif, right side -->
+  <g stroke="#2a2f36" stroke-width="1.6">
+    <line x1="890" y1="420" x2="1010" y2="480"/>
+    <line x1="1010" y1="480" x2="1115" y2="425"/>
+    <line x1="1010" y1="480" x2="985" y2="620"/>
+    <line x1="1010" y1="480" x2="1110" y2="600"/>
+    <line x1="985" y1="620" x2="1080" y2="720"/>
+  </g>
+  <g fill="#3a4149">
+    <circle cx="890" cy="420" r="6"/>
+    <circle cx="1115" cy="425" r="6"/>
+    <circle cx="985" cy="620" r="6"/>
+    <circle cx="1110" cy="600" r="6"/>
+    <circle cx="1080" cy="720" r="6"/>
+  </g>
+  <circle cx="1010" cy="480" r="9" fill="#b8ff4a"/>
+  <circle cx="1010" cy="480" r="18" fill="none" stroke="#b8ff4a" stroke-opacity="0.28" stroke-width="1.6"/>
+
+  <!-- brand mark + wordmark -->
+  <g transform="translate(100,360)">
+    <g stroke="#d6dee6" stroke-width="2.2" stroke-opacity="0.55">
+      <line x1="8" y1="14" x2="26" y2="26"/><line x1="26" y1="26" x2="44" y2="12"/>
+      <line x1="26" y1="26" x2="14" y2="44"/><line x1="26" y1="26" x2="42" y2="42"/>
+    </g>
+    <circle cx="8" cy="14" r="4" fill="#d6dee6"/><circle cx="44" cy="12" r="4" fill="#d6dee6"/>
+    <circle cx="14" cy="44" r="4" fill="#d6dee6"/><circle cx="42" cy="42" r="4" fill="#d6dee6"/>
+    <circle cx="26" cy="26" r="5.4" fill="#b8ff4a"/>
+  </g>
+  <text x="168" y="402" font-family="Helvetica, Arial, sans-serif" font-size="38" font-weight="700" fill="#f6f4ef" letter-spacing="-0.5">LinkPeople</text>
+
+  <!-- headline -->
+  <text x="100" y="560" font-family="Helvetica, Arial, sans-serif" font-size="62" font-weight="700" fill="#f6f4ef" letter-spacing="-1.5">Recruitment &amp; HR Advisory</text>
+  <text x="100" y="632" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="62" fill="#b8ff4a" letter-spacing="-1">for Digital Businesses</text>
+
+  <!-- sub -->
+  <text x="102" y="720" font-family="Helvetica, Arial, sans-serif" font-size="25" fill="#9da5af" letter-spacing="0.4">FinTech &amp; Payments  ·  SaaS &amp; Technology  ·  E-commerce</text>
+
+  <!-- domain -->
+  <text x="102" y="878" font-family="Helvetica, Arial, sans-serif" font-size="21" font-weight="600" fill="#6b7178" letter-spacing="1">www.linkpeople.agency</text>
+</svg>

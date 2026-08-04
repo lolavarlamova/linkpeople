@@ -36,10 +36,24 @@ function table(title, rows) {
 function confirmTalent(first) {
   return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#111315;line-height:1.6;max-width:560px">' +
     "<p>Hi " + esc(first) + ",</p>" +
-    "<p>Thank you for sharing your profile with LinkPeople.</p>" +
-    "<p>We have received your information and will review it for relevant current and future opportunities.</p>" +
-    "<p>Please note that submitting a profile does not guarantee employment, an interview or an individual response.</p>" +
+    "<p>Thank you for joining the LinkPeople Talent Network. Your profile has been received.</p>" +
+    "<p>Joining the Talent Network is not an application for a specific vacancy, and submitting a profile does not guarantee contact. We will reach out only when a potentially relevant opportunity exists.</p>" +
+    '<p>You can ask us to delete your profile at any time by emailing <a href="mailto:privacy@linkpeople.agency">privacy@linkpeople.agency</a>.</p>' +
     "<p>Best,<br>LinkPeople Talent Network<br>talent@linkpeople.agency</p></div>";
+}
+
+// Best-effort in-memory rate limit (per warm instance; not a substitute for a shared store).
+function clientIp(req) {
+  var xf = (req.headers && (req.headers["x-forwarded-for"] || req.headers["x-real-ip"])) || "";
+  return String(xf).split(",")[0].trim() || "unknown";
+}
+function rateLimited(ip) {
+  var store = globalThis.__lpTalentHits || (globalThis.__lpTalentHits = new Map());
+  var now = Date.now(), WINDOW = 10000, MAX = 5;
+  var arr = (store.get(ip) || []).filter(function (t) { return now - t < WINDOW; });
+  arr.push(now); store.set(ip, arr);
+  if (store.size > 5000) store.clear();
+  return arr.length > MAX;
 }
 
 function parseMultipart(req) {
@@ -66,6 +80,7 @@ function parseMultipart(req) {
 export default async function handler(req, res) {
   if (req.method !== "POST") { res.status(405).json({ ok: false, error: "method_not_allowed" }); return; }
   if (!process.env.RESEND_API_KEY) { console.error("talent-submission: RESEND_API_KEY missing"); res.status(500).json({ ok: false, error: "server_config" }); return; }
+  if (rateLimited(clientIp(req))) { res.status(429).json({ ok: false, error: "rate_limited" }); return; }
 
   var parsed;
   try { parsed = await parseMultipart(req); } catch (e) { res.status(400).json({ ok: false, error: "bad_request" }); return; }
@@ -81,9 +96,13 @@ export default async function handler(req, res) {
     pref = clip(fields.preferred_location, 160), expertise = clip(fields.expertise, 80),
     seniority = clip(fields.seniority, 80), workFormat = clip(fields.work_format, 80),
     summary = clip(fields.summary, 4000);
+  var consentPrivacy = clip(fields.consent_privacy, 8), consentStore = clip(fields.consent_store, 8);
+  var source = clip(fields.sourcePage, 120) || "/talent-network";
 
   if (!name || !email || !expertise || !isEmail(email)) { res.status(400).json({ ok: false, error: "validation" }); return; }
   if (linkedin && !/^https?:\/\/.+\..+/.test(linkedin)) { res.status(400).json({ ok: false, error: "validation" }); return; }
+  // Both consents are mandatory and must be recorded.
+  if (consentPrivacy !== "yes" || consentStore !== "yes") { res.status(400).json({ ok: false, error: "consent" }); return; }
 
   // Optional CV — validate size + extension + MIME.
   var attachments;
@@ -103,14 +122,17 @@ export default async function handler(req, res) {
     ["Full name", name], ["Email", email], ["LinkedIn", linkedin || "—"], ["Current location", location || "—"],
     ["Preferred work location", pref || "—"], ["Area of expertise", expertise], ["Seniority", seniority || "—"],
     ["Preferred work format", workFormat || "—"], ["Summary", summary || "—"],
-    ["Submitted", new Date().toISOString()], ["CV attached", attachments ? "Yes" : "No"],
+    ["CV attached", attachments ? "Yes" : "No"],
+    ["Consent — read Candidate Privacy Notice", consentPrivacy === "yes" ? "Yes" : "No"],
+    ["Consent — store up to 12 months", consentStore === "yes" ? "Yes" : "No"],
+    ["Submitted", new Date().toISOString()], ["Source page", source],
   ]);
 
   var resend = new Resend(process.env.RESEND_API_KEY);
   try {
     await resend.emails.send({ from: FROM, to: TO, replyTo: email, subject: subject, html: html, attachments: attachments });
     var first = name.split(/\s+/)[0] || name;
-    await resend.emails.send({ from: FROM, to: email, subject: "Your LinkPeople profile has been received", html: confirmTalent(first) });
+    await resend.emails.send({ from: FROM, to: email, subject: "Your profile has been received by LinkPeople", html: confirmTalent(first) });
   } catch (e) {
     console.error("talent-submission: send failed:", e && e.message);
     res.status(502).json({ ok: false, error: "send_failed" }); return;

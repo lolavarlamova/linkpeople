@@ -375,9 +375,10 @@ button[disabled], .btn[disabled] { opacity: 0.6; cursor: progress; }
 .footer-brand { max-width: 34ch; }
 .footer-brand .brand { margin-bottom: 16px; }
 .footer-brand p { color: var(--text-muted-dark); font-size: 0.95rem; }
-.footer-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.footer-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; min-width: 0; }
+.footer-col { min-width: 0; }
 .footer-col h4 { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted-dark); margin-bottom: 16px; }
-.footer-col a { display: block; padding: 6px 0; font-size: 0.95rem; color: var(--text-muted-dark); transition: color var(--dur) var(--ease); }
+.footer-col a { display: block; padding: 6px 0; font-size: 0.95rem; color: var(--text-muted-dark); transition: color var(--dur) var(--ease); overflow-wrap: anywhere; }
 .footer-col a:hover { color: var(--text-light); }
 .footer-bottom { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border-dark); display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted-dark); }
 @media (min-width: 860px) {
@@ -394,6 +395,25 @@ button[disabled], .btn[disabled] { opacity: 0.6; cursor: progress; }
 [data-reveal-delay="2"] { transition-delay: .16s; }
 [data-reveal-delay="3"] { transition-delay: .24s; }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1 !important; transform: none !important; transition: none; } }
+
+/* ============================================================
+   Opportunities
+   ============================================================ */
+.opp-list { display: grid; grid-template-columns: 1fr; gap: clamp(18px, 2vw, 24px); }
+@media (min-width: 760px) { .opp-list.has-items { grid-template-columns: 1fr 1fr; } }
+.opp-head { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.opp-status { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; padding: 6px 13px; border-radius: var(--radius-pill); border: 1px solid var(--border-dark); color: var(--text-muted-dark); }
+.opp-status--open { color: #0b0d0f; background: var(--accent); border-color: var(--accent); }
+.opp-card--feature { border-color: rgba(184, 255, 74, 0.35); }
+.opp-card .h-card { margin-bottom: 6px; }
+.opp-meta { display: flex; flex-wrap: wrap; gap: 8px 10px; margin-top: 18px; }
+.opp-meta li { font-size: 0.82rem; padding: 6px 13px; border: 1px solid var(--border-dark); border-radius: var(--radius-pill); color: var(--text-muted-dark); }
+.opp-empty p { max-width: 60ch; }
+.opp-detail .opp-section { margin-top: clamp(28px, 4vw, 44px); }
+.opp-detail .opp-section h2 { font-size: 1.25rem; letter-spacing: -0.01em; margin-bottom: 14px; }
+.opp-detail .opp-section ul { display: grid; gap: 10px; }
+.opp-detail .opp-section li { position: relative; padding-left: 18px; color: var(--text-muted-dark); }
+.opp-detail .opp-section li::before { content: ""; position: absolute; left: 0; top: 0.7em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 
 /* ---------- utilities ---------- */
 .stack > * + * { margin-top: 1rem; }
