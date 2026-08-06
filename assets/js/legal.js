@@ -16,6 +16,6 @@ window.LP.legal = {
   registrationDetails: null,   // individual-entrepreneur registration details — REQUIRED before launch
   legalContactEmail: "hello@linkpeople.agency",
   privacyContactEmail: "privacy@linkpeople.agency",
-  descriptor: "a Ukrainian individual entrepreneur operating under the LinkPeople brand",
-  lastUpdated: "4 August 2026" // change deliberately when the legal texts change — not per deploy
+  descriptor: "a Ukrainian individual entrepreneur",
+  legalLastUpdated: "6 August 2026" // change deliberately when the legal texts change — not per deploy
 };

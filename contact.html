@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Contact | LinkPeople — Discuss a Hiring Need</title>
-<meta name="description" content="Tell LinkPeople about your hiring need. We will help you define the right search and the most effective way to run it." />
+<title>Contact | LinkPeople</title>
+<meta name="description" content="Tell LinkPeople about your hiring plans or people challenge. We will help you identify the right type of support — recruitment or HR advisory." />
 <link rel="canonical" href="https://www.linkpeople.agency/contact" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Contact | LinkPeople" />
-<meta property="og:description" content="Discuss a hiring need with a boutique recruitment and HR advisory partner." />
+<meta property="og:description" content="Start a conversation about recruitment or HR advisory with LinkPeople." />
 <meta property="og:url" content="https://www.linkpeople.agency/contact" />
 <meta property="og:image" content="https://www.linkpeople.agency/assets/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -52,13 +52,13 @@
 <main id="main" class="theme-dark">
   <section class="container page-hero">
     <span class="eyebrow reveal">Employer Enquiry</span>
-    <h1 class="h-hero reveal" data-reveal-delay="1">Discuss a <span class="serif accent-text">hiring need.</span></h1>
-    <p class="lead reveal" data-reveal-delay="2">Tell us what you need. We will help you define the right search and the most effective way to run it. Handled confidentially.</p>
+    <h1 class="h-hero reveal" data-reveal-delay="1">Start a <span class="serif accent-text">conversation.</span></h1>
+    <p class="lead reveal" data-reveal-delay="2">Tell us about your hiring plans or people challenge. We will help you identify the right type of support. Handled confidentially.</p>
   </section>
 
   <section class="section" style="padding-top:0">
     <div class="container">
-      <form class="form-wrap reveal" data-lp-form data-endpoint="/api/employer-enquiry" data-success="Thank you. Your enquiry has been received. We will review the details and contact you shortly." data-error="We could not send your enquiry. Please try again or email hello@linkpeople.agency directly." novalidate>
+      <form class="form-wrap reveal" data-lp-form data-endpoint="/api/employer-enquiry" data-success="Thank you. Your enquiry has been received. We will review the details and be in touch." data-error="We could not send your enquiry. Please try again or email hello@linkpeople.agency directly." novalidate>
         <div class="hp-wrap" aria-hidden="true"><label for="c-hp">Do not fill this field</label><input class="hp-field" id="c-hp" name="company_url" type="text" tabindex="-1" autocomplete="off" /></div>
         <div class="form-grid two">
           <div class="field full"><label for="c-name">Full name <span class="req" aria-hidden="true">*</span></label><input id="c-name" name="name" type="text" autocomplete="name" maxlength="120" required aria-describedby="c-name-err" /><span class="err" id="c-name-err" role="alert"></span></div>
@@ -68,9 +68,9 @@
           <div class="field"><label for="c-help">What do you need help with? <span class="req" aria-hidden="true">*</span></label>
             <select id="c-help" name="help" required aria-describedby="c-help-err">
               <option value="">Please select…</option>
-              <option>Recruitment</option><option>Executive Search</option><option>Multi-role Hiring</option><option>Embedded Recruitment</option><option>Fractional HR</option><option>HR Project</option><option>Not sure yet</option>
+              <option>Recruitment</option><option>Executive Search</option><option>Embedded Recruitment</option><option>Candidate Sourcing</option><option>Fractional HR</option><option>HR Project or Advisory</option><option>Not sure yet</option>
             </select><span class="err" id="c-help-err" role="alert"></span></div>
-          <div class="field"><label for="c-roles">Number of roles (if relevant)</label><input id="c-roles" name="roles" type="text" inputmode="numeric" maxlength="40" placeholder="e.g. 1, 3, 5+" /></div>
+          <div class="field" data-show-when="Recruitment|Executive Search|Embedded Recruitment|Candidate Sourcing" hidden><label for="c-roles">Number of roles (if relevant)</label><input id="c-roles" name="roles" type="text" inputmode="numeric" maxlength="40" placeholder="e.g. 1, 3, 5+" /></div>
           <div class="field"><label for="c-timeline">Expected timeline</label>
             <select id="c-timeline" name="timeline">
               <option value="">Please select…</option>

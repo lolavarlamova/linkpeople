@@ -118,7 +118,7 @@ export default async function handler(req, res) {
   }
 
   var subject = "New Talent Network profile — " + name + " — " + expertise;
-  var html = table("New Talent Network profile", [
+  var rows = [
     ["Full name", name], ["Email", email], ["LinkedIn", linkedin || "—"], ["Current location", location || "—"],
     ["Preferred work location", pref || "—"], ["Area of expertise", expertise], ["Seniority", seniority || "—"],
     ["Preferred work format", workFormat || "—"], ["Summary", summary || "—"],
@@ -126,7 +126,12 @@ export default async function handler(req, res) {
     ["Consent — read Candidate Privacy Notice", consentPrivacy === "yes" ? "Yes" : "No"],
     ["Consent — store up to 12 months", consentStore === "yes" ? "Yes" : "No"],
     ["Submitted", new Date().toISOString()], ["Source page", source],
-  ]);
+  ];
+  // Lead source (UTM + referrer) — internal notification only; omitted when absent.
+  [["utm_source", "UTM source"], ["utm_medium", "UTM medium"], ["utm_campaign", "UTM campaign"], ["utm_content", "UTM content"], ["referrer", "Referring page"]].forEach(function (p) {
+    var v = clip(fields[p[0]], 300); if (v) rows.push([p[1], v]);
+  });
+  var html = table("New Talent Network profile", rows);
 
   var resend = new Resend(process.env.RESEND_API_KEY);
   try {

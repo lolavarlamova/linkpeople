@@ -68,11 +68,16 @@ export default async function handler(req, res) {
   var ua = (req.headers && req.headers["user-agent"]) || "unknown";
   var source = clip(data.sourcePage, 120) || "/contact";
   var subject = "New employer enquiry — " + company + " — " + help;
-  var html = table("New employer enquiry", [
+  var rows = [
     ["Full name", name], ["Company", company], ["Work email", email], ["Company website", website || "—"],
     ["Needs help with", help], ["Number of roles", roles || "—"], ["Expected timeline", timeline || "—"],
     ["Message", message], ["Submitted", new Date().toISOString()], ["Source page", source], ["User agent", ua],
-  ]);
+  ];
+  // Lead source (UTM + referrer) — internal notification only; omitted when absent.
+  [["utm_source", "UTM source"], ["utm_medium", "UTM medium"], ["utm_campaign", "UTM campaign"], ["utm_content", "UTM content"], ["referrer", "Referring page"]].forEach(function (p) {
+    var v = clip(data[p[0]], 300); if (v) rows.push([p[1], v]);
+  });
+  var html = table("New employer enquiry", rows);
 
   var resend = new Resend(process.env.RESEND_API_KEY);
   try {

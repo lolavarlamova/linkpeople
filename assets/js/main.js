@@ -9,6 +9,20 @@
     });
   }
 
+  // Lead source: read UTM params + referrer from the URL only (no cookies, no storage, no tracking).
+  // Included in internal notification emails only; never shown to the visitor.
+  function leadSource() {
+    var out = {};
+    try {
+      var q = new URLSearchParams(window.location.search);
+      ["utm_source", "utm_medium", "utm_campaign", "utm_content"].forEach(function (k) {
+        var v = q.get(k); if (v) out[k] = String(v).slice(0, 200);
+      });
+      if (document.referrer) out.referrer = String(document.referrer).slice(0, 300);
+    } catch (e) {}
+    return out;
+  }
+
   /* ---------- Sticky header background on scroll ---------- */
   var header = document.getElementById("siteHeader");
   if (header) {
@@ -56,9 +70,25 @@
 
   /* ---------- Legal "last updated" from central config (static fallback in HTML) ---------- */
   (function () {
-    if (!window.LP || !window.LP.legal || !window.LP.legal.lastUpdated) return;
+    if (!window.LP || !window.LP.legal || !window.LP.legal.legalLastUpdated) return;
     var els = document.querySelectorAll("[data-legal-updated]");
-    Array.prototype.forEach.call(els, function (el) { el.textContent = window.LP.legal.lastUpdated; });
+    Array.prototype.forEach.call(els, function (el) { el.textContent = window.LP.legal.legalLastUpdated; });
+  })();
+
+  /* ---------- Conditional form fields (show only when a select has certain values) ---------- */
+  (function () {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-show-when]"), function (el) {
+      var form = el.closest("form"); if (!form) return;
+      var ctrl = form.querySelector('select[name="help"]'); if (!ctrl) return;
+      var allowed = el.getAttribute("data-show-when").split("|");
+      var input = el.querySelector("input, select, textarea");
+      function upd() {
+        var on = allowed.indexOf(ctrl.value) >= 0;
+        el.hidden = !on;
+        if (!on && input) input.value = "";
+      }
+      ctrl.addEventListener("change", upd); upd();
+    });
   })();
 
   /* ---------- Reveal on scroll ---------- */
@@ -468,11 +498,13 @@
       if (submitBtn) { submitBtn.disabled = true; submitBtn.dataset.label = submitBtn.innerHTML; submitBtn.textContent = "Sending\u2026"; }
       announce("info", "Sending\u2026");
 
+      var ls = leadSource();
       var request;
       if (fileInput) {
         var fd = new FormData(form);
         fd.append("t0", String(startedAt));
         fd.append("sourcePage", window.location.pathname);
+        Object.keys(ls).forEach(function (k) { fd.append(k, ls[k]); });
         request = fetch(endpoint, { method: "POST", body: fd });
       } else {
         var data = { t0: startedAt, sourcePage: window.location.pathname };
@@ -482,6 +514,7 @@
           data[input.name] = input.type === "checkbox" ? input.checked : input.value.trim();
         });
         if (honeypot && honeypot.name) data[honeypot.name] = honeypot.value;
+        Object.keys(ls).forEach(function (k) { data[k] = ls[k]; });
         request = fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
       }
 
