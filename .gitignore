@@ -4,3 +4,6 @@
 .env*.local
 node_modules/
 .claude/
+
+# Local preview screenshots — not committed
+_preview-shots/
