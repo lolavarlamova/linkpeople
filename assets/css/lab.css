@@ -225,3 +225,7 @@
 .tbl td b { color: var(--text-light); font-weight:500; }
 @media (max-width: 620px) { .tbl thead { display:none; } .tbl tr { display:block; border-bottom:1px solid var(--border-dark); padding:10px 0; }
   .tbl td { display:block; border:none; padding:4px 0; } }
+
+/* Lab pages: allow long Ukrainian CTA labels to wrap so buttons never force horizontal
+   overflow on narrow screens (the global .btn is nowrap; Lab labels are longer). */
+main .btn { white-space: normal; }
