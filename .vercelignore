@@ -8,3 +8,16 @@ opportunities/_template.html
 .env
 .env.local
 node_modules/
+
+# --- Робочі матеріали продукту Job Search Lab ---
+# Платний контент: інструкції S0-S6, уроки, curriculum, демо-кейс,
+# робочі файли, інженерні тести і звіти. У репозиторій не потрапляють
+# і на Vercel не викладаються. Провідний слеш - тільки корінь, щоб
+# не блокувати файли для завантаження в lab/job-search-os/files/.
+/*.md
+!/README.md
+/*.docx
+/*.xlsx
+/*.txt
+/*.sha256
+/_superseded/
