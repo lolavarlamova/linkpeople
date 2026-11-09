@@ -20,4 +20,8 @@ node_modules/
 /*.xlsx
 /*.txt
 /*.sha256
+/*.pdf
 /_superseded/
+
+# Вихідні відео уроків: важкі файли, не в репозиторій і не на Vercel.
+/video_*/

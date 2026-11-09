@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>LinkPeople Lab | Пошук роботи, побудований рекрутерами</title>
 <meta name="description" content="Практичні продукти для тих, хто шукає роботу в Україні та за кордоном. Пошук роботи з ChatGPT або Claude, побудований рекрутерами LinkPeople." />
-<meta name="robots" content="noindex, nofollow" />
+<meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://www.linkpeople.agency/lab" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="LinkPeople Lab | Пошук роботи, побудований рекрутерами" />
@@ -20,12 +20,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/assets/css/styles.css" />
 <link rel="stylesheet" href="/assets/css/lab.css" />
+<style>.ph{background:rgba(184,255,74,.14);border-radius:3px;padding:0 4px;white-space:nowrap}</style>
+<script src="/assets/js/consent.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти до вмісту</a>
-
-<!-- PROTOTYPE MARKER — remove this block before production -->
-<div class="proto-bar"><div class="container"><span><b>Прототип.</b> Сторінка для внутрішнього перегляду. Оплата не активована, юридичні реквізити не опубліковані.</span></div></div>
 
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
@@ -96,18 +95,19 @@
 
       <div class="grid grid-2">
         <article class="card prod-card">
-          <span class="prod-status">Передпродаж</span>
+          <span class="prod-status">Скоро</span>
           <span class="eyebrow">Перший продукт</span>
-          <h3 class="h-card" style="margin-top:10px">LinkPeople Job Search OS</h3>
+          <h3 class="h-card" style="margin-top:10px">Знайди роботу з AI</h3>
           <p class="muted">Знайдіть роботу швидше за допомогою AI — від вибору вакансії до підготовки до співбесіди. Практична система з ChatGPT або Claude, створена рекрутером.</p>
-          <div class="prod-price">450 грн</div>
-          <p class="muted" style="font-size:.85rem;margin-top:2px">Ціна раннього доступу</p>
+          <div class="prod-price">575 грн</div>
+          <p class="muted" style="font-size:.85rem;margin-top:2px">Разовий платіж, без підписки. Шість записаних уроків, AI-інструкції, шаблон CV і трекер.</p>
+          <p class="muted" style="font-size:.85rem;margin-top:8px"><b style="color:var(--accent-ink)">Продаж відкриємо найближчим часом.</b></p>
           <div class="prod-meta">
             <span class="pill">Досвід у digital</span>
             <span class="pill">Україна та за кордон</span>
             <span class="pill">Українською</span>
           </div>
-          <p style="margin-top:20px"><a class="link-arrow" href="/lab/job-search-os">Подивитися продукт <span class="arrow" aria-hidden="true">→</span></a></p>
+          <p class="muted" style="margin-top:20px;font-size:.85rem">Поки курс готується, можна почати з персональної роботи — нижче на цій сторінці.</p>
         </article>
 
         <article class="card">
@@ -129,10 +129,61 @@
     </div>
   </section>
 
-  <section class="section-sm theme-dark">
+  <section class="section theme-dark" id="personal">
     <div class="container">
-      <div class="note-box" style="max-width:74ch">
-        LinkPeople Lab — окремий напрям для кандидатів. Послуги для компаній залишаються на основному сайті агентства і працюють як раніше.
+      <div class="section-head">
+        <span class="eyebrow">Персональна робота</span>
+        <h2 class="h-section">Персональна робота з Лолою.</h2>
+        <p class="lead" style="max-width:62ch;margin-top:14px">Якщо хочете, щоб ваше резюме подивився рекрутер, а не ви самі з AI.</p>
+      </div>
+
+      <div class="grid grid-2">
+        <article class="card prod-card">
+          <span class="eyebrow">Послуга</span>
+          <h3 class="h-card" style="margin-top:10px">Розбір CV</h3>
+          <p class="muted">Письмові коментарі до вашого резюме та дзвінок на 30 хвилин, щоб розібрати їх разом.</p>
+          <div class="prod-price">2000 грн</div>
+          <p class="muted" style="font-size:.85rem;margin-top:2px">Письмові коментарі + 30 хвилин розмови</p>
+          <p style="margin-top:20px"><a class="btn btn-primary" href="[BOOKING_URL]">Записатись <span class="arrow" aria-hidden="true">→</span></a></p>
+        </article>
+
+        <article class="card prod-card">
+          <span class="eyebrow">Послуга</span>
+          <h3 class="h-card" style="margin-top:10px">Карʼєрна консультація</h3>
+          <p class="muted">Година розмови про ваш пошук: напрям, позиціонування, складні місця в досвіді, наступні кроки.</p>
+          <div class="prod-price">4000 грн</div>
+          <p class="muted" style="font-size:.85rem;margin-top:2px">60 хвилин · перед нею — безкоштовні 15 хвилин, щоб зрозуміти, чи я вам узагалі потрібна</p>
+          <p style="margin-top:20px"><a class="btn btn-primary" href="[BOOKING_URL]">Записатись <span class="arrow" aria-hidden="true">→</span></a></p>
+        </article>
+      </div>
+
+      <div class="note-box" style="max-width:76ch;margin-top:26px">
+        Розбір CV з рекрутером — 2000 грн за одне резюме. Курс, де ви робите це самі під кожну вакансію, — 575 грн.
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm theme-light" aria-label="Для компаній">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Для компаній</span>
+        <h2 class="h-section">Шукаєте людей, а не роботу?</h2>
+      </div>
+      <p class="lead" style="max-width:62ch">LinkPeople Lab — напрям для кандидатів. Recruitment, embedded recruitment, fractional HR та HR advisory для компаній залишаються на основному сайті агенції.</p>
+      <p style="margin-top:20px"><a class="link-arrow" href="/services">Послуги для компаній <span class="arrow" aria-hidden="true">→</span></a></p>
+    </div>
+  </section>
+
+
+  <section class="section-sm theme-dark" aria-label="Реквізити продавця">
+    <div class="container">
+      <div style="border-top:1px solid rgba(255,255,255,.12);padding-top:24px;font-size:.88rem;line-height:1.7;opacity:.8;max-width:70ch">
+        <p style="margin:0 0 6px">Фізична особа-підприємець Варламова Онат Ольга Олегівна</p>
+        <p style="margin:0 0 6px">Реєстраційний номер облікової картки платника податків: 3245710729</p>
+        <p style="margin:0 0 6px">Запис у ЄДР: № 2010350000000634098 від 02.09.2024</p>
+        <p style="margin:0 0 6px">Адреса реєстрації ФОП: Україна, 02105, місто Київ, вул. Будівельників (Дніпровський р-н), будинок 1, корпус 4, квартира 78</p>
+        <p style="margin:0 0 6px">Телефон: <a href="tel:+380504693316">+380504693316</a> · Електронна пошта: <a href="mailto:lola@linkpeople.agency">lola@linkpeople.agency</a></p>
+        <p style="margin:12px 0 0">Документи для курсу буде опубліковано разом із відкриттям продажу.</p>
       </div>
     </div>
   </section>

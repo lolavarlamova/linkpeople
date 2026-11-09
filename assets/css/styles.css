@@ -16,8 +16,9 @@
   --text-muted-light: #62676d;  /* muted text on light bg */
   --border-dark: rgba(255, 255, 255, 0.12);
   --border-light: rgba(17, 19, 21, 0.14);
-  --accent: #b8ff4a;
-  --accent-hover: #c7ff70;
+  --accent: #5fa23c;
+  --accent-hover: #6fb34a;
+  --accent-ink: #39742b;   /* darker accent for text on light sections (AA) */
 
   /* Fonts */
   --font-sans: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -57,7 +58,7 @@ img, svg, canvas { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; cursor: pointer; background: none; border: none; }
 ul { list-style: none; }
-::selection { background: rgba(184, 255, 74, 0.25); color: #fff; }
+::selection { background: rgba(95, 162, 60, 0.25); color: #fff; }
 
 .serif { font-family: var(--font-serif); font-weight: 400; font-style: italic; }
 .accent-text { color: var(--accent); }
@@ -341,7 +342,7 @@ body.nav-open .mobile-nav { opacity: 1; transform: none; pointer-events: auto; v
 }
 .field textarea { min-height: 130px; resize: vertical; }
 .field input::placeholder, .field textarea::placeholder { color: #5a636d; }
-.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184,255,74,.14); }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(95, 162, 60,.14); }
 .field input[aria-invalid="true"], .field select[aria-invalid="true"], .field textarea[aria-invalid="true"] { border-color: #ff6b6b; }
 .field .err { font-size: 0.8rem; color: #ff8a8a; min-height: 1em; }
 .field-file input[type="file"] { padding: 11px 12px; }
@@ -350,7 +351,7 @@ body.nav-open .mobile-nav { opacity: 1; transform: none; pointer-events: auto; v
 .consent label { font-weight: 400; font-size: 0.9rem; color: var(--text-muted-dark); }
 .form-status { margin-top: 8px; font-size: 0.95rem; padding: 14px 16px; border-radius: 10px; border: 1px solid var(--border-dark); display: none; }
 .form-status.show { display: block; }
-.form-status.info { border-color: rgba(184,255,74,.4); background: rgba(184,255,74,.06); }
+.form-status.info { border-color: rgba(95, 162, 60,.4); background: rgba(95, 162, 60,.06); }
 .form-status.error { border-color: rgba(255,107,107,.5); background: rgba(255,107,107,.07); }
 .form-note { font-size: 0.85rem; color: var(--text-muted-dark); margin-top: 14px; }
 .hp-wrap { position: absolute !important; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
@@ -404,7 +405,7 @@ button[disabled], .btn[disabled] { opacity: 0.6; cursor: progress; }
 .opp-head { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
 .opp-status { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; padding: 6px 13px; border-radius: var(--radius-pill); border: 1px solid var(--border-dark); color: var(--text-muted-dark); }
 .opp-status--open { color: #0b0d0f; background: var(--accent); border-color: var(--accent); }
-.opp-card--feature { border-color: rgba(184, 255, 74, 0.35); }
+.opp-card--feature { border-color: rgba(95, 162, 60, 0.35); }
 .opp-card .h-card { margin-bottom: 6px; }
 .opp-meta { display: flex; flex-wrap: wrap; gap: 8px 10px; margin-top: 18px; }
 .opp-meta li { font-size: 0.82rem; padding: 6px 13px; border: 1px solid var(--border-dark); border-radius: var(--radius-pill); color: var(--text-muted-dark); }
@@ -423,3 +424,13 @@ button[disabled], .btn[disabled] { opacity: 0.6; cursor: progress; }
 .page-hero { padding-block: clamp(72px, 9vw, 140px) clamp(20px,4vw,40px); }
 .page-hero .h-hero { max-width: 18ch; }
 .badge-note { display:inline-block; font-size:0.8rem; color: var(--text-muted-dark); border:1px solid var(--border-dark); border-radius: var(--radius-pill); padding:6px 14px; }
+
+/* ---- Palette V3: logo follows --accent; darker accent-ink for accent TEXT on light sections (WCAG AA) ---- */
+.brand-mark circle[fill="#5fa23c"] { fill: var(--accent); }
+.theme-light .accent-text,
+.theme-light .card .num,
+.theme-light .case-kicker,
+.theme-light .article-card .a-cat,
+.theme-light .field .req,
+.theme-light .file-name { color: var(--accent-ink); }
+.theme-light .eyebrow::before { background: var(--accent-ink); }

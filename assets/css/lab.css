@@ -39,7 +39,7 @@
   --lab-go:         var(--accent);
   --lab-risk:       #e2a43a;
   --lab-stop:       #d66a5a;
-  --lab-go-wash:    rgba(184, 255, 74, 0.07);
+  --lab-go-wash:    rgba(95, 162, 60, 0.07);
   --lab-risk-wash:  rgba(226, 164, 58, 0.09);
   --lab-stop-wash:  rgba(214, 106, 90, 0.09);
   --lab-draft:      rgba(255, 255, 255, 0.18);
@@ -47,13 +47,13 @@
   --lab-paper-ink:  #14171b;
   --lab-paper-muted:#62676d;
   --lab-paper-rule: #dcd8ce;
-  --lab-mark:       rgba(184, 255, 74, 0.42);
+  --lab-mark:       rgba(95, 162, 60, 0.42);
   --lab-proto-bg:   #2a2410;
   --lab-proto-ink:  #e6e2cf;
 }
 
 /* --- prototype marker (remove before production) --- */
-.proto-bar { background:var(--lab-proto-bg); border-bottom:1px solid rgba(184,255,74,.22); color:var(--lab-proto-ink); font-size:.78rem; letter-spacing:.02em; }
+.proto-bar { background:var(--lab-proto-bg); border-bottom:1px solid rgba(95, 162, 60,.22); color:var(--lab-proto-ink); font-size:.78rem; letter-spacing:.02em; }
 .proto-bar .container { display:flex; gap:12px; align-items:center; justify-content:center; padding-block:9px; text-align:center; flex-wrap:wrap; }
 .proto-bar b { color: var(--accent); font-weight:600; }
 
@@ -91,7 +91,7 @@
 .theme-light .mod-row p { color: var(--text-muted-light); }
 .mod-row .tag { display:inline-block; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; border:1px solid var(--border-dark); border-radius:var(--radius-pill); padding:3px 9px; margin-top:8px; color:var(--text-muted-dark); }
 .theme-light .mod-row .tag { border-color: var(--border-light); color: var(--text-muted-light); }
-.mod-row .tag.fast { border-color: rgba(184,255,74,.45); color: var(--accent); }
+.mod-row .tag.fast { border-color: rgba(95, 162, 60,.45); color: var(--accent); }
 
 /* --- access gate --- */
 .gate-wrap { max-width: 460px; margin-inline:auto; text-align:center; }
@@ -111,7 +111,7 @@
 
 /* --- route choice --- */
 .route-card { border:1px solid var(--border-dark); border-radius: var(--radius-card); background: var(--surface-dark); padding: clamp(24px,2.6vw,36px); display:flex; flex-direction:column; height:100%; transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease); }
-.route-card:hover { border-color: rgba(184,255,74,.4); transform: translateY(-3px); }
+.route-card:hover { border-color: rgba(95, 162, 60,.4); transform: translateY(-3px); }
 .route-card .rt-label { font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; color: var(--accent); font-weight:600; }
 .route-card h3 { font-size: clamp(1.15rem,1.9vw,1.45rem); margin:12px 0 8px; line-height:1.25; }
 .route-card .rt-time { font-family: var(--font-serif); font-size:1.35rem; color: var(--text-light); margin-bottom:14px; }
@@ -122,7 +122,7 @@
 .prog { display:flex; gap:6px; margin:18px 0 6px; }
 .prog i { height:4px; flex:1; border-radius:2px; background: rgba(255,255,255,.12); }
 .prog i.done { background: var(--accent); }
-.prog i.now { background: rgba(184,255,74,.45); }
+.prog i.now { background: rgba(95, 162, 60,.45); }
 .prog-note { font-size:.78rem; color: var(--text-muted-dark); }
 
 /* --- workspace steps --- */
@@ -131,7 +131,7 @@
 .ws-head .num { width:26px; height:26px; flex:none; border-radius:50%; display:grid; place-items:center; font-size:.78rem; font-weight:600;
   background: rgba(255,255,255,.08); color: var(--text-muted-dark); }
 .ws-step.done .ws-head .num { background: var(--accent); color: var(--background-dark); }
-.ws-step.active .ws-head .num { background: rgba(184,255,74,.25); color: var(--accent); }
+.ws-step.active .ws-head .num { background: rgba(95, 162, 60,.25); color: var(--accent); }
 .ws-head .t { flex:1; font-weight:600; font-size:.98rem; }
 .ws-head .m { font-size:.78rem; color: var(--text-muted-dark); }
 .ws-open { padding:0 20px 22px; border-top:1px solid var(--border-dark); }
@@ -229,3 +229,11 @@
 /* Lab pages: allow long Ukrainian CTA labels to wrap so buttons never force horizontal
    overflow on narrow screens (the global .btn is nowrap; Lab labels are longer). */
 main .btn { white-space: normal; }
+
+/* Fill-in blanks in course templates */
+.blank { color: var(--text-muted-dark); letter-spacing: 1px; }
+
+/* Clickable module row */
+a.mod-row { color: inherit; transition: border-color var(--dur) var(--ease); }
+a.mod-row:hover h4 { color: var(--accent); }
+a.mod-row .arrow { color: var(--accent); }
