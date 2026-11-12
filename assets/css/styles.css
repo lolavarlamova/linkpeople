@@ -641,3 +641,15 @@ main:has(> section.theme-light:last-child) + .site-footer::before {
 }
 .door-paper > * { position: relative; z-index: 1; }
 @media (max-width: 680px) { .door-paper::after { width: 110px; height: 110px; right: -30px; top: -26px; bottom: auto; transform: rotate(8deg); } .door-paper .h-card { max-width: 15ch; } }
+
+/* --- Mobile fixes (2026-11-12) --- */
+/* The sticky header gets backdrop-filter when scrolled; because .mobile-nav is a
+   child of the header, that filter became the fixed menu's containing block, so the
+   menu collapsed to header height once the page was scrolled. Drop the filter while
+   the menu is open so the fixed overlay covers the whole viewport again. */
+body.nav-open .site-header { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; transition: none !important; }
+/* Belt-and-suspenders: pin the open menu to the viewport regardless of ancestors. */
+body.nav-open .mobile-nav { position: fixed; inset: 76px 0 0 0; }
+
+/* Give the hero's italic accent word room so its descender never clips on mobile. */
+.h-hero { line-height: 1.08; }
