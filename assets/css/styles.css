@@ -4,21 +4,24 @@
    ============================================================ */
 
 :root {
-  /* Colour tokens */
-  --background-dark: #0b0d0f;
-  --surface-dark: #14171b;
-  --surface-dark-hover: #1a1e23;
-  --background-light: #f3f0e8;
-  --surface-light: #ebe7de;
-  --text-light: #f6f4ef;
-  --text-dark: #111315;
-  --text-muted-dark: #9da5af;   /* muted text on dark bg */
-  --text-muted-light: #62676d;  /* muted text on light bg */
-  --border-dark: rgba(255, 255, 255, 0.12);
-  --border-light: rgba(17, 19, 21, 0.14);
-  --accent: #5fa23c;
-  --accent-hover: #6fb34a;
-  --accent-ink: #39742b;   /* darker accent for text on light sections (AA) */
+  /* Colour tokens — "handmade paper" palette (2026 redesign) */
+  --background-dark: #2a4234;    /* deep green base */
+  --surface-dark: #34523f;       /* Deep Green */
+  --surface-dark-hover: #3e6049;
+  --background-light: #e8ddcc;    /* Oat Milk Beige */
+  --surface-light: #ded0ba;
+  --text-light: #f4eee2;          /* warm cream on green */
+  --text-dark: #26402f;           /* deep green ink on beige */
+  --text-muted-dark: #afc1b3;    /* muted sage on green */
+  --text-muted-light: #5c6b5f;   /* muted green-grey on beige */
+  --border-dark: rgba(244, 238, 226, 0.14);
+  --border-light: rgba(38, 64, 47, 0.16);
+  --accent: #82ac70;              /* Fresh Meadow — primary accent */
+  --accent-hover: #93bb82;
+  --accent-ink: #35603b;          /* darker green for accent text on light (AA) */
+  --accent-pop: #beff27;          /* Electric Lime — tiny pop */
+  --blush: #e6bec9;               /* soft blush */
+  --rose: #b85c7e;                /* deeper rose for text on beige (AA) */
 
   /* Fonts */
   --font-sans: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -434,3 +437,112 @@ button[disabled], .btn[disabled] { opacity: 0.6; cursor: progress; }
 .theme-light .field .req,
 .theme-light .file-name { color: var(--accent-ink); }
 .theme-light .eyebrow::before { background: var(--accent-ink); }
+
+/* ============================================================
+   REDESIGN D — "handmade paper" look (beige-forward, elephant)
+   Added 2026-11. Brand assets in assets/img/brand/.
+   ============================================================ */
+body { background: var(--background-light); }
+
+/* accent text on light sections uses the AA-safe deep green */
+.theme-light .accent-text, .theme-light .card .num, .theme-light .case-kicker,
+.theme-light .article-card .a-cat, .theme-light .field .req, .theme-light .file-name { color: var(--accent-ink); }
+
+/* elephant brand mark (wider than the old dot cluster) */
+.brand .brand-mark { width: 46px; height: 30px; }
+
+/* header: reads on a light hero at the top, deep-green tint when scrolled */
+.site-header:not(.is-scrolled) .brand,
+.site-header:not(.is-scrolled) .brand-word { color: var(--text-dark); }
+.site-header:not(.is-scrolled) .nav-desktop a,
+.site-header:not(.is-scrolled) .link-quiet { color: var(--text-muted-light); }
+.site-header:not(.is-scrolled) .nav-desktop a:hover,
+.site-header:not(.is-scrolled) .nav-desktop a[aria-current="page"] { color: var(--text-dark); }
+.site-header:not(.is-scrolled) .nav-toggle { border-color: var(--border-light); }
+.site-header.is-scrolled { background: rgba(42, 66, 52, 0.88); border-bottom-color: var(--border-dark); }
+.site-header.is-scrolled .brand, .site-header.is-scrolled .brand-word { color: var(--text-light); }
+
+/* HERO: beige handmade paper + torn-collage panel */
+.hero-paper.theme-dark {
+  background:
+    linear-gradient(rgba(233, 222, 205, 0.66), rgba(233, 222, 205, 0.66)),
+    url("/assets/img/brand/paper-soft.webp") center / cover no-repeat,
+    var(--background-light);
+  color: var(--text-dark);
+  position: relative; isolation: isolate; padding-bottom: clamp(72px, 9vw, 118px);
+}
+.hero-paper.theme-dark .container { position: relative; z-index: 1; }
+.hero-paper.theme-dark .eyebrow,
+.hero-paper.theme-dark .lead,
+.hero-paper.theme-dark .hero-industries { color: var(--text-muted-light); }
+.hero-paper.theme-dark .eyebrow::before { background: var(--rose); }
+.hero-paper.theme-dark .accent-text { color: var(--rose); }
+.hero-paper.theme-dark .btn-primary { background: var(--surface-dark); color: var(--text-light); }
+.hero-paper.theme-dark .btn-primary:hover { background: var(--surface-dark-hover); }
+.hero-paper.theme-dark .btn-secondary { border-color: var(--border-light); color: var(--text-dark); }
+.hero .hero-visual {
+  position: relative; min-height: 420px; border-radius: 16px; overflow: hidden;
+  background: url("/assets/img/brand/collage-4.webp") center / cover no-repeat;
+  box-shadow: 0 26px 64px rgba(38, 64, 47, 0.22);
+}
+.hero .hero-visual canvas { display: none; }
+
+/* torn-paper divider from the hero into the first deep-green section */
+#start.theme-dark { position: relative; margin-top: -1px; padding-top: clamp(64px, 7vw, 96px); }
+#start.theme-dark::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -34px; height: 78px;
+  z-index: 4; pointer-events: none;
+  background: url("/assets/img/brand/torn-1.png") center top / cover no-repeat;
+}
+
+/* --- Redesign D: texture & rhythm down the whole page --- */
+.theme-dark  { background-image: url("/assets/img/brand/paper-soft.webp"); background-repeat: repeat; background-size: 860px; background-blend-mode: soft-light; }
+.theme-light { background-image: url("/assets/img/brand/paper-soft.webp"); background-repeat: repeat; background-size: 860px; background-blend-mode: soft-light; }
+/* hero keeps its own (washed) paper treatment defined above */
+.hero-paper.theme-dark { background-blend-mode: normal; }
+
+/* torn-paper edge wherever the section theme flips colour */
+.theme-dark + .theme-light, .theme-light + .theme-dark { position: relative; }
+.theme-dark + .theme-light::before, .theme-light + .theme-dark::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -30px; height: 72px;
+  z-index: 5; pointer-events: none;
+  background: url("/assets/img/brand/torn-1.png") center top / cover no-repeat;
+}
+
+/* one torn-paper collage accent, "pinned" in a beige section (reads clean) */
+#industries { position: relative; }
+#industries::after {
+  content: ""; position: absolute; z-index: 1; pointer-events: none;
+  top: 30px; right: 40px; width: 168px; height: 168px;
+  background: url("/assets/img/brand/collage-3-cut.png") center / contain no-repeat;
+  transform: rotate(-4deg);
+  filter: drop-shadow(0 16px 26px rgba(38, 64, 47, 0.26));
+}
+@media (max-width: 900px) { #industries::after { display: none; } }
+
+/* ---- Inner-page heroes (.page-hero inside a dark main): full-bleed beige paper ---- */
+main.theme-dark { position: relative; }
+.page-hero { position: relative; z-index: 1; }
+.page-hero::before {
+  content: ""; position: absolute; z-index: -1;
+  top: -140px; left: 50%; transform: translateX(-50%); width: 100vw;
+  height: calc(100% + 140px);
+  background:
+    linear-gradient(rgba(233, 222, 205, 0.66), rgba(233, 222, 205, 0.66)),
+    url("/assets/img/brand/paper-soft.webp") center / cover no-repeat,
+    var(--background-light);
+}
+.page-hero, .page-hero .h-hero, .page-hero h1 { color: var(--text-dark); }
+.page-hero .eyebrow, .page-hero .lead, .page-hero .muted { color: var(--text-muted-light); }
+.page-hero .eyebrow::before { background: var(--rose); }
+.page-hero .accent-text, .page-hero .serif { color: var(--rose); }
+.page-hero .btn-primary { background: var(--surface-dark); color: var(--text-light); }
+.page-hero .btn-secondary { border-color: var(--border-light); color: var(--text-dark); }
+
+/* torn-paper edge from the inner hero into the first content section */
+.page-hero + section { position: relative; }
+.page-hero + section::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -30px; height: 72px;
+  z-index: 5; pointer-events: none;
+  background: url("/assets/img/brand/torn-1.png") center top / cover no-repeat;
+}

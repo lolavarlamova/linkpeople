@@ -1,0 +1,31 @@
+{
+  "brand": "LinkPeople",
+  "product": "LinkPeople Lab",
+  "updated": "2026-11-12",
+  "look": "handmade paper / editorial, warm beige-forward with deep green, gentle",
+  "palette": {
+    "deepGreen":    { "hex": "#34523F", "role": "primary brand colour; dark-section background; key word / logo / accent" },
+    "deepGreenBg":  { "hex": "#2A4234", "role": "darker green for full backgrounds / dark scenes" },
+    "oatBeige":     { "hex": "#E8DDCC", "role": "main light background (paper)" },
+    "beigeShade":   { "hex": "#DED0BA", "role": "paper shadow / surfaces / cards" },
+    "cream":        { "hex": "#F4EEE2", "role": "warm text colour on green / dark scenes" },
+    "inkGreen":     { "hex": "#26402F", "role": "body text on beige" },
+    "freshMeadow":  { "hex": "#82AC70", "role": "secondary accent in blocks/illustration — NOT for text" },
+    "accentInk":    { "hex": "#35603B", "role": "accent text on light backgrounds (AA-safe)" },
+    "electricLime": { "hex": "#BEFF27", "role": "tiny pop only — logo eye, highlight, kicker" },
+    "blushPink":    { "hex": "#E6BEC9", "role": "soft decorative accent" },
+    "rose":         { "hex": "#B85C7E", "role": "readable rose for accent text on beige" },
+    "mutedOnGreen": { "hex": "#AFC1B3", "role": "muted text on green" },
+    "mutedOnBeige": { "hex": "#5C6B5F", "role": "muted text on beige" }
+  },
+  "usage": "Beige + deep green do the heavy lifting; lime and pink are spices (tiny accents, never large areas or body text); meadow for blocks/illustration only.",
+  "fonts": {
+    "site": { "sans": "Manrope", "serifItalicAccent": "Instrument Serif" },
+    "note": "Video factory currently uses Inter Tight + Playfair Display — align to one pairing if a single brand look is wanted."
+  },
+  "logo": {
+    "mark": "one-line elephant, deep green stroke #044617 with lime eye #A5D024 (hides LP + initials LV)",
+    "file": "Downloads/linkpeople-elephant.svg"
+  },
+  "assets": "assets/img/brand/ — paper-*.webp (textures), torn-*.png (deckled edges), collage-*.webp/-cut.png (torn-paper collages), brush-*.webp (lime strokes)"
+}
