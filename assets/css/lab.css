@@ -237,3 +237,41 @@ main .btn { white-space: normal; }
 a.mod-row { color: inherit; transition: border-color var(--dur) var(--ease); }
 a.mod-row:hover h4 { color: var(--accent); }
 a.mod-row .arrow { color: var(--accent); }
+
+/* =====================================================================
+   /lab as a landing — Redesign E (2026-11-12)
+   ===================================================================== */
+.lab-hero.hero-paper { margin-top: -76px; padding: calc(76px + clamp(48px, 6vw, 96px)) 0 clamp(72px, 8vw, 120px); }
+.lab-hero-grid { display: grid; gap: clamp(36px, 5vw, 64px); align-items: center; }
+@media (min-width: 960px) { .lab-hero-grid { grid-template-columns: 1.15fr .85fr; } }
+.lab-hero .h-hero { margin-top: 22px; max-width: 14ch; }
+.lab-hero .lead { margin-top: 24px; max-width: 54ch; }
+.lab-hero .hero-cta { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 14px; }
+.lab-en-note { margin-top: 28px; font-size: .9rem; color: var(--text-muted-light); }
+.lab-hero-visual {
+  min-height: clamp(300px, 34vw, 480px); border-radius: 18px;
+  background: url("/assets/img/brand/collage-2.webp") center / cover no-repeat;
+  box-shadow: 0 30px 70px -30px rgba(38, 64, 47, .45); transform: rotate(1.2deg);
+}
+@media (max-width: 959px) { .lab-hero-visual { min-height: 260px; transform: none; } }
+
+.prod-card .prod-price { color: inherit; }
+.prod-soon { margin-top: 10px; font-size: .92rem; font-weight: 600; color: var(--accent-ink); }
+.prod-hero { box-shadow: 0 30px 60px -34px rgba(38, 64, 47, .5) !important; }
+
+/* personal services: sheets of paper on green — present, but quieter than the course */
+.paper-card.card {
+  color: var(--text-dark); border-color: transparent;
+  background: var(--background-light) url("/assets/img/brand/paper-soft.webp") center / 860px; background-blend-mode: soft-light;
+  box-shadow: 0 26px 60px -32px rgba(10, 20, 14, .6);
+}
+.paper-card.card:hover { background-color: #f1e9db; border-color: transparent; }
+.paper-card .eyebrow { color: var(--text-muted-light); }
+.paper-card .eyebrow::before { background: var(--rose); }
+.paper-card p { color: var(--text-muted-light) !important; }
+.paper-card .prod-note { font-size: .88rem; margin-top: 2px; }
+.lab-aside { margin-top: 30px; max-width: 70ch; font-family: var(--font-serif); font-style: italic; font-size: clamp(1.15rem, 1.6vw, 1.4rem); color: var(--text-light); }
+.lab-aside a { color: var(--accent); border-bottom: 1px solid currentColor; }
+
+.lab-company { display: grid; gap: 24px 64px; align-items: end; }
+@media (min-width: 900px) { .lab-company { grid-template-columns: 1fr 1fr; } }
