@@ -634,13 +634,8 @@ main:has(> section.theme-light:last-child) + .site-footer::before {
 .door-paper p { color: var(--text-muted-light) !important; max-width: 34ch; }
 .door-paper .h-card { max-width: 18ch; }
 .door-paper .link-arrow { color: var(--text-dark); }
-.door-paper::after {
-  content: ""; position: absolute; right: -34px; bottom: -40px; width: 210px; height: 210px; pointer-events: none;
-  background: url("/assets/img/brand/collage-2-cut.png") center / contain no-repeat;
-  transform: rotate(-7deg); filter: drop-shadow(0 14px 22px rgba(38, 64, 47, .28));
-}
 .door-paper > * { position: relative; z-index: 1; }
-@media (max-width: 680px) { .door-paper::after { width: 110px; height: 110px; right: -30px; top: -26px; bottom: auto; transform: rotate(8deg); } .door-paper .h-card { max-width: 15ch; } }
+@media (max-width: 680px) { .door-paper .h-card { max-width: 15ch; } }
 
 /* --- Mobile fixes (2026-11-12) --- */
 /* The sticky header gets backdrop-filter when scrolled; because .mobile-nav is a
