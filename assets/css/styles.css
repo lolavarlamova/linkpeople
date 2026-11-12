@@ -13,7 +13,7 @@
   --text-light: #f4eee2;          /* warm cream on green */
   --text-dark: #26402f;           /* deep green ink on beige */
   --text-muted-dark: #afc1b3;    /* muted sage on green */
-  --text-muted-light: #5c6b5f;   /* muted green-grey on beige */
+  --text-muted-light: #42514a;   /* muted green-grey on beige (AA-readable) */
   --border-dark: rgba(244, 238, 226, 0.14);
   --border-light: rgba(38, 64, 47, 0.16);
   --accent: #82ac70;              /* Fresh Meadow — primary accent */
@@ -542,7 +542,7 @@ main.theme-dark { position: relative; }
    ============================================================ */
 :root {
   --text-muted-dark: #c2d0c4;          /* was #afc1b3 — easier to read on green */
-  --text-muted-light: #55645a;
+  --text-muted-light: #42514a;         /* was #55645a — darker for AA on beige cards */
   --edge-h: clamp(44px, 4.4vw, 66px);
   --paper-img: url("/assets/img/brand/paper-soft.webp");
 }
