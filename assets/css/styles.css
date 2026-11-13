@@ -648,3 +648,19 @@ body.nav-open .mobile-nav { position: fixed; inset: 76px 0 0 0; }
 
 /* Give the hero's italic accent word room so its descender never clips on mobile. */
 .h-hero { line-height: 1.08; }
+
+/* --- Phone only: hide the decorative paper imagery; keep it on tablet/iPad/desktop
+       (per request 2026-11-13: pictures look great on big screens but on the phone
+       they sit between the heading and the text and slow people down) --- */
+@media (max-width: 700px) {
+  /* big collage pictures in the hero (home: collage-4, Lab: collage-2) */
+  .hero .hero-visual,
+  .lab-hero-visual { display: none !important; }
+  /* thin torn-paper seams between colour blocks — off on phones for a cleaner, faster scroll */
+  .hero-paper + section:not(.theme-light)::before,
+  .page-hero + section:not(.theme-light)::before,
+  .theme-light + section:not(.theme-light):not(.page-hero)::before,
+  #start.theme-dark::before,
+  section:not(.theme-light):not(.page-hero):not(.hero-paper) + .theme-light::before,
+  main:has(> section.theme-light:last-child) + .site-footer::before { content: none !important; display: none !important; }
+}
